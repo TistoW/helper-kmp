@@ -1,4 +1,4 @@
-package com.tisto.smartvote
+package com.tisto.helper
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport

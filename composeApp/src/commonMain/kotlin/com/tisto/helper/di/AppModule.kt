@@ -1,4 +1,4 @@
-package com.tisto.smartvote.di
+package com.tisto.helper.di
 
 import com.tisto.helper.core.helper.di.helperModule
 import org.koin.dsl.module

@@ -79,11 +79,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.tisto.smartvote"
+    namespace = "com.tisto.helper"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.zenenta.smartvote"
+        applicationId = "com.tisto.helper"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -111,11 +111,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.zenenta.smartvote.MainKt"
+        mainClass = "com.tisto.helper.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.zenenta.smartvote"
+            packageName = "com.tisto.helper"
             packageVersion = "1.0.0"
         }
     }

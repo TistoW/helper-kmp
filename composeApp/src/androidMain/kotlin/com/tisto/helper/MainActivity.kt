@@ -1,4 +1,4 @@
-package com.tisto.smartvote
+package com.tisto.helper
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

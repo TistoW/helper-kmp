@@ -1,4 +1,4 @@
-package com.tisto.smartvote
+package com.tisto.helper
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window

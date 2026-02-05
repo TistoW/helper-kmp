@@ -1,4 +1,4 @@
-package com.tisto.smartvote
+package com.tisto.helper
 
 interface Platform {
     val name: String

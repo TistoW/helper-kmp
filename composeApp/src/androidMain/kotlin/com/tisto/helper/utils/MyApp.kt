@@ -1,4 +1,4 @@
-package com.tisto.smartvote.utils
+package com.tisto.helper.utils
 
 import android.app.Application
 import com.tisto.helper.core.helper.utils.prefs.PlatformPrefs

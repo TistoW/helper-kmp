@@ -1,4 +1,4 @@
-package com.tisto.smartvote
+package com.tisto.helper
 
 class JsPlatform: Platform {
     override val name: String = "Web with Kotlin/JS"

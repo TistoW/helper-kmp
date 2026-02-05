@@ -1,6 +1,7 @@
 package com.zenenta.smartvote
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +18,9 @@ fun App() {
         modules(getAppModules())
     }) {
         ProvideBackDispatcher {
-            Box {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 Text(
                     text = "Hello World",
                     modifier = Modifier.align(Alignment.Center)

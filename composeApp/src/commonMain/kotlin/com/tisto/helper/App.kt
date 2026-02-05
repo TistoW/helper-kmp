@@ -22,7 +22,7 @@ fun App() {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Text(
-                    text = "Hello World",
+                    text = "Hello World, This Is Helper",
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

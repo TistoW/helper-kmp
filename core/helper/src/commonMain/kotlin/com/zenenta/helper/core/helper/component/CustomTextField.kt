@@ -73,9 +73,9 @@ import com.zenenta.helper.core.helper.utils.ext.MobilePreview
 import com.zenenta.helper.core.helper.utils.ext.TabletPreview
 import com.zenenta.helper.core.helper.utils.ext.def
 import org.jetbrains.compose.resources.vectorResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.ic_asset_close
-import smartvote.core.helper.generated.resources.ic_search
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.ic_asset_close
+import helper.core.helper.generated.resources.ic_search
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost

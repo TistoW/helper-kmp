@@ -46,8 +46,8 @@ import com.zenenta.helper.core.helper.ui.theme.TextAppearance
 import com.zenenta.helper.core.helper.utils.ext.def
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.*
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.*
 
 class UserProfile(
     val name: String = "",

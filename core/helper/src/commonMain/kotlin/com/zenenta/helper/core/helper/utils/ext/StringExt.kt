@@ -3,9 +3,9 @@ package com.zenenta.helper.core.helper.utils.ext
 import androidx.compose.runtime.Composable
 import com.zenenta.helper.core.helper.utils.ext.def
 import org.jetbrains.compose.resources.stringResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.detail
-import smartvote.core.helper.generated.resources.tambah
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.detail
+import helper.core.helper.generated.resources.tambah
 
 fun String?.shorten(maxLength: Int = 10): String {
     val displaySearch = if (this?.length.def(0) > maxLength) {

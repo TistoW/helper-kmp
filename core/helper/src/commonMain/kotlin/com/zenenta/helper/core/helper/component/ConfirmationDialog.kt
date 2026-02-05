@@ -26,8 +26,8 @@ import com.zenenta.helper.core.helper.ui.theme.TextAppearance
 import com.zenenta.helper.core.helper.ui.theme.ZenentaHelperTheme
 import com.zenenta.helper.core.helper.utils.ext.MobilePreview
 import org.jetbrains.compose.resources.painterResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.ic_asset_close
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.ic_asset_close
 
 // ========================================
 // 1. BASIC CONFIRMATION DIALOG

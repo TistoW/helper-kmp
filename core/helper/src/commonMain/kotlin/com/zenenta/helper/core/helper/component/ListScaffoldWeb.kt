@@ -33,9 +33,9 @@ import com.zenenta.helper.core.helper.utils.ext.TabletPreview
 import com.zenenta.helper.core.helper.utils.ext.isMobilePhone
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.ic_asset_close
-import smartvote.core.helper.generated.resources.ic_search
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.ic_asset_close
+import helper.core.helper.generated.resources.ic_search
 import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class)

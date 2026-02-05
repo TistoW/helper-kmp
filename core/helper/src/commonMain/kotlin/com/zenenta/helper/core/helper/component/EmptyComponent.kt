@@ -19,9 +19,9 @@ import com.zenenta.helper.core.helper.ui.theme.TextAppearance
 import com.zenenta.helper.core.helper.ui.theme.ZenentaHelperTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import smartvote.core.helper.generated.resources.Res
-import smartvote.core.helper.generated.resources.hasil_pencarian_tidak_ditemukan
-import smartvote.core.helper.generated.resources.ic_asset_list
+import helper.core.helper.generated.resources.Res
+import helper.core.helper.generated.resources.hasil_pencarian_tidak_ditemukan
+import helper.core.helper.generated.resources.ic_asset_list
 
 @Composable
 fun EmptyState(

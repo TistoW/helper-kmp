@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">tukangapps.com</domain>
+        <domain includeSubdomains="true">zenenta.net</domain>
+        <domain includeSubdomains="true">dev.zenenta.click</domain>
+        <domain includeSubdomains="true">192.168.1.2</domain>
+        <domain includeSubdomains="true">192.168.1.3</domain>
+        <domain includeSubdomains="true">192.168.1.4</domain>
+        <domain includeSubdomains="true">192.168.1.5</domain>
+        <domain includeSubdomains="true">192.168.1.6</domain>
+        <domain includeSubdomains="true">192.168.1.7</domain>
+        <domain includeSubdomains="true">192.168.1.8</domain>
+        <domain includeSubdomains="true">192.168.1.11</domain>
+        <domain includeSubdomains="true">192.168.0.6</domain>
+        <domain includeSubdomains="true">192.168.1.24</domain>
+        <domain includeSubdomains="true">192.168.1.73</domain>
+        <domain includeSubdomains="true">192.168.1.74</domain>
+        <domain includeSubdomains="true">192.168.1.75</domain>
+        <domain includeSubdomains="true">192.168.1.98</domain>
+        <domain includeSubdomains="true">192.168.208.160</domain>
+        <domain includeSubdomains="true">192.168.63.116</domain>
+        <domain includeSubdomains="true">172.20.240.1</domain>
+        <domain includeSubdomains="true">192.168.235.99</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">api.koinmu.com</domain>
+        <domain includeSubdomains="true">koinmu.com</domain>
+        <domain includeSubdomains="true">112.78.188.108</domain>
+        <domain includeSubdomains="true">192.168.0.102</domain>
+        <domain includeSubdomains="true">ngrok.io</domain>
+        <domain includeSubdomains="true">ngrok-free.app</domain>
+        <domain includeSubdomains="true">koinmu.test</domain>
+        <domain includeSubdomains="true">zenenta.com</domain>
+        <domain includeSubdomains="true">zenenta.click</domain>
+    </domain-config>
+</network-security-config>

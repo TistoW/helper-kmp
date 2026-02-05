@@ -1,0 +1,155 @@
+package com.zenenta.helper.core.helper.utils.media
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.zenenta.helper.core.helper.ui.theme.Colors
+import com.zenenta.helper.core.helper.ui.theme.Spacing
+import com.zenenta.helper.core.helper.ui.theme.TextAppearance
+import com.zenenta.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.zenenta.helper.core.helper.utils.ext.MobilePreview
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.openFilePicker
+import io.github.vinceglb.filekit.mimeType
+import io.github.vinceglb.filekit.name
+import io.github.vinceglb.filekit.readBytes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.decodeToImageBitmap
+
+
+@Immutable
+data class PickedImage(
+    val file: PlatformFile,
+    val name: String,
+    val mimeType: String?,
+)
+
+@Stable
+class ImagePickerState internal constructor(
+    private val scope: CoroutineScope,
+) {
+    var picked: PickedImage? by mutableStateOf(null)
+        private set
+
+    var bitmap: ImageBitmap? by mutableStateOf(null)
+        private set
+
+    var errorMessage: String? by mutableStateOf(null)
+        private set
+
+    var isLoading: Boolean by mutableStateOf(false)
+        private set
+
+    fun clear() {
+        picked = null
+        bitmap = null
+        errorMessage = null
+        isLoading = false
+    }
+
+    fun pick() {
+        scope.launch {
+            errorMessage = null
+            isLoading = true
+
+            try {
+                val file: PlatformFile? = FileKit.openFilePicker(type = FileKitType.Image)
+                if (file == null) {
+                    // cancel
+                    isLoading = false
+                    return@launch
+                }
+
+                val result = PickedImage(
+                    file = file,
+                    name = file.name,
+                    mimeType = file.mimeType()?.toString()
+                )
+
+                picked = result
+
+                // decode for preview
+                val bytes = file.readBytes()
+                bitmap = bytes.decodeToImageBitmap()
+            } catch (t: Throwable) {
+                errorMessage = t.message ?: "Unknown error"
+                bitmap = null
+                picked = null
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+}
+
+@Composable
+fun rememberImagePickerState(): ImagePickerState {
+    val scope = rememberCoroutineScope()
+    return remember(scope) { ImagePickerState(scope) }
+}
+
+/**
+ * Widget siap pakai: pick + tampilkan preview (Image()).
+ */
+@Composable
+fun ImagePickerScreen() {
+    val picker = rememberImagePickerState()
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Button(onClick = picker::pick) {
+            Text("Pick Image")
+        }
+
+        if (picker.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        picker.errorMessage?.let {
+            Text("Error: $it", color = MaterialTheme.colorScheme.error)
+        }
+
+        picker.bitmap?.let { bmp ->
+            Image(
+                bitmap = bmp,
+                contentDescription = picker.picked?.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        picker.picked?.let {
+            Text("File: ${it.name} (${it.mimeType ?: "unknown"})")
+        }
+
+        OutlinedButton(onClick = picker::clear) {
+            Text("Clear")
+        }
+    }
+}
+
+@MobilePreview
+@Composable
+fun MobilePreviewsForm() {
+    ZenentaHelperTheme {
+        ImagePickerScreen()
+    }
+}
+

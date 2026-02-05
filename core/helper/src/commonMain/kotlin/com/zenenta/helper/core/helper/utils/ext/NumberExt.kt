@@ -1,0 +1,323 @@
+package com.zenenta.helper.core.helper.utils.ext
+
+import com.zenenta.helper.core.helper.utils.ext.def
+import com.zenenta.helper.core.helper.utils.ext.logs
+import kotlin.math.round
+
+fun String?.toDoubleSafety(): Double {
+    return if (this != null) {
+        if (this.isEmpty()) {
+            0.0
+        } else {
+            try {
+                this.toDouble()
+            } catch (e: NumberFormatException) {
+                logs("ErrorNumber:" + e.message)
+                0.0
+            }
+        }
+    } else {
+        0.0
+    }
+}
+
+fun Double?.toDoubleSafety(): Double {
+    return if (this != null) {
+        try {
+            this.toDouble()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0.0
+        }
+    } else {
+        0.0
+    }
+}
+
+fun Int?.toDoubleSafety(): Double {
+    return if (this != null) {
+        try {
+            this.toDouble()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0.0
+        }
+    } else {
+        0.0
+    }
+}
+
+fun Long?.toDoubleSafety(): Double {
+    return if (this != null) {
+        try {
+            this.toDouble()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0.0
+        }
+    } else {
+        0.0
+    }.also { logs("hasil toDoubleSafety : $it") }
+}
+
+fun Int?.toFloatSafety(): Float {
+    return if (this != null) {
+        try {
+            this.toFloat()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0f
+        }
+    } else {
+        0f
+    }
+}
+
+fun String?.toIntSafety(): Int {
+    return if (this != null) {
+        if (this.isEmpty()) {
+            0
+        } else {
+            try {
+                this.toInt()
+            } catch (e: NumberFormatException) {
+                logs("ErrorNumber:" + e.message)
+                0
+            }
+        }
+    } else {
+        0
+    }
+}
+
+fun Boolean?.toBoolSafety(): Boolean {
+    return this ?: false
+}
+
+fun Double?.toIntSafety(): Int {
+    return if (this != null) {
+        try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0
+        }
+    } else {
+        0
+    }
+}
+
+fun Float?.toIntSafety(): Int {
+    return if (this != null) {
+        try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0
+        }
+    } else {
+        0
+    }
+}
+
+fun Long?.toIntSafety(): Int {
+    return if (this != null) {
+        try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0
+        }
+    } else {
+        0
+    }
+}
+
+fun Int?.toIntSafety(): Int {
+    return if (this != null) {
+        try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0
+        }
+    } else {
+        0
+    }
+}
+
+fun Float?.toFloatSafety(): Float {
+    return if (this != null) {
+        try {
+            this.toFloat()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0f
+        }
+    } else {
+        0f
+    }
+}
+
+fun Byte?.toIntSafety(): Int {
+    return if (this != null) {
+        try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            logs("ErrorNumber:" + e.message)
+            0
+        }
+    } else {
+        0
+    }
+}
+
+fun String?.toStringForceEmpty(): String {
+    if (this.isNullOrEmpty()) {
+        return ""
+    }
+    return this.toString()
+}
+
+fun Int?.discount(discount: Int?): Int {
+    val value = this.def(0)
+    return ((discount.def(0).toDouble() / 100) * value).toInt()
+}
+
+fun Double.roundToInt(): Int {
+    return round(this).toInt()
+}
+
+fun Int.safetyValue(): String {
+    return this.toString().ifCondition({ it == "0" }) { "" }
+}
+
+fun Double.safetyValue(): String {
+    return this.toString().ifCondition({ it == "0" }) { "" }
+}
+
+fun Double.safetyPrice(): String {
+    return this.reformatDecimal().ifCondition({ it == "0" }) { "" }
+}
+
+fun String.safetyOnChangeInt(): Int {
+    return this.ifCondition({ v -> v == "" }) { "0" }.toIntSafety()
+}
+
+fun String.safetyOnChangeDouble(): Double {
+    return this.ifCondition({ v -> v == "" }) { "0" }.toDoubleSafety()
+}
+
+
+fun Double?.reformatDecimal(): String {
+    val value = this.def(0.0)
+    return value.formatCurrency()
+}
+
+fun Number?.formatRupiah(
+    showCurrency: Boolean = true,
+    maxFractionDigits: Int = 3,
+    rounding: KmpRounding = KmpRounding.DOWN
+): String {
+    return formatCurrency(showCurrency, maxFractionDigits, rounding)
+}
+
+fun Number?.formatCurrency(
+    showCurrency: Boolean = false,
+    maxFractionDigits: Int = 3,
+    rounding: KmpRounding = KmpRounding.DOWN
+): String {
+    if (this == null) return if (showCurrency) "Rp0" else "0"
+
+    val value = this.toDouble()
+    val isNegative = value < 0
+    val absValue = kotlin.math.abs(value)
+
+    // ✅ FIX: Convert to string dulu untuk avoid floating point precision
+    val valueStr = absValue.toString()
+    val parts = valueStr.split(".")
+
+    val integerPart = parts[0].toLongOrNull() ?: 0L
+    val fractionStr = parts.getOrNull(1) ?: ""
+
+    // ✅ FIX: Process fraction sebagai string
+    val fraction = if (fractionStr.isNotEmpty()) {
+        processFraction(fractionStr, maxFractionDigits, rounding)
+    } else {
+        ""
+    }
+
+    val formattedInt = formatWithDot(integerPart)
+    val formattedFraction = if (fraction.isNotEmpty()) ",$fraction" else ""
+
+    val result = buildString {
+        if (isNegative) append("-")
+        append(formattedInt)
+        append(formattedFraction)
+    }
+
+    return if (showCurrency) "Rp$result" else result
+}
+
+// ✅ NEW: Process fraction as string
+private fun processFraction(
+    fractionStr: String,
+    maxDigits: Int,
+    rounding: KmpRounding
+): String {
+    if (maxDigits <= 0) return ""
+
+    // Pad atau truncate ke maxDigits
+    val padded = fractionStr.padEnd(maxDigits + 1, '0')
+    val current = padded.take(maxDigits)
+    val nextDigit = padded.getOrNull(maxDigits)?.digitToIntOrNull() ?: 0
+
+    // Apply rounding
+    val shouldRoundUp = when (rounding) {
+        KmpRounding.DOWN -> false
+        KmpRounding.UP -> nextDigit > 0
+        KmpRounding.HALF_UP -> nextDigit >= 5
+    }
+
+    val result = if (shouldRoundUp) {
+        // Round up last digit
+        val asNumber = current.toLongOrNull() ?: return current
+        (asNumber + 1).toString().padStart(maxDigits, '0')
+    } else {
+        current
+    }
+
+    // Remove trailing zeros
+    return result.trimEnd('0')
+}
+
+// ✅ Keep existing formatWithDots
+private fun formatWithDot(amount: Long): String {
+    if (amount == 0L) return "0"
+    return amount.toString()
+        .reversed()
+        .chunked(3)
+        .joinToString(".")
+        .reversed()
+}
+
+enum class KmpRounding {
+    DOWN,
+    UP,
+    HALF_UP
+}
+
+// ========== TEST ==========
+fun main() {
+    println(200.2.formatCurrency()) // "200,2" ✅
+    println(200.1.formatCurrency()) // "200,1" ✅
+    println(200.199.formatCurrency()) // "200,199" ✅
+    println(200.099.formatCurrency()) // "200,099" ✅
+    println(200.2.formatCurrency(maxFractionDigits = 1)) // "200,2" ✅
+    println(
+        200.26.formatCurrency(
+            maxFractionDigits = 1,
+            rounding = KmpRounding.HALF_UP
+        )
+    ) // "200,3" ✅
+}

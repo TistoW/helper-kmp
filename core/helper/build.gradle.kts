@@ -98,7 +98,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.zenenta.helper.core.helper"
+    namespace = "com.tisto.helper.core.helper"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

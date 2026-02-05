@@ -79,7 +79,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.zenenta.smartvote"
+    namespace = "com.tisto.smartvote"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

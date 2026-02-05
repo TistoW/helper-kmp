@@ -9,7 +9,7 @@ import kotlin.reflect.KProperty
  *
  * These delegates provide a clean, ergonomic API similar to Kotpref:
  * ```
- * object _root_ide_package_.com.zenenta.helper.core.helper.utils.prefs.PrefManager {
+ * object _root_ide_package_.com.tisto.helper.core.helper.utils.prefs.PrefManager {
  *     var isLogin by boolPref("isLogin", false)
  *     var token by stringPref("token", "")
  *     var userId by nullableStringPref("userId")

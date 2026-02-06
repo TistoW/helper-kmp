@@ -66,6 +66,11 @@ fun Long?.def(v: Long = 0L): Long {
     return this ?: v
 }
 
+fun <T> List<T>.def(value: List<T> = listOf()): List<T> {
+    return value
+}
+
+
 fun String?.defaultError(): String = if (this.isNullOrEmpty()) "Server Error" else this
 
 fun String?.addZeroUpFront(digit: Int = 2): String {
@@ -86,4 +91,12 @@ fun <T> List<T>.insertAt(value: T, index: Int = 0): List<T> {
         index >= size -> this + value
         else -> take(index) + value + drop(index)
     }
+}
+
+fun <T> T?.isNull(): Boolean {
+    return this == null
+}
+
+fun <T> T?.isNotNull(): Boolean {
+    return this != null
 }

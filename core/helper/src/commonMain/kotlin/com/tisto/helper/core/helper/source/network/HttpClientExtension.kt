@@ -1,6 +1,6 @@
 package com.tisto.helper.core.helper.source.network
 
-import com.tisto.helper.core.helper.utils.media.PickedImage
+import com.tisto.helper.core.helper.component.PickedImage
 import io.github.vinceglb.filekit.readBytes
 import io.ktor.client.*
 import io.ktor.client.call.body
@@ -173,50 +173,3 @@ inline fun <reified T> T.toFieldsMap(
         }
     }
 }
-
-//suspend inline fun <reified Req : Any, reified Res> HttpClient.postMultipart(
-//    url: String,
-//    body: Req? = null,
-//    fileFieldName: String = "image",
-//    pickedImage: PickedImage? = null,
-//    headers: Map<String, String>? = null,
-//): Res {
-//
-//    val fields: Map<String, String> = body.toFieldsMap()
-//    val parts = mutableListOf<PartData>()
-//
-//    fields.forEach { (k, v) ->
-//        parts += PartData.FormItem(
-//            value = v,
-//            dispose = {},
-//            partHeaders = Headers.build {
-//                append(HttpHeaders.ContentDisposition, "form-data; name=\"$k\"")
-//            }
-//        )
-//    }
-//
-//    if (pickedImage != null) {
-//        val bytes = pickedImage.file.readBytes()
-//        val fileName = pickedImage.name
-//        val mime = pickedImage.mimeType ?: "application/octet-stream"
-//        val ct = runCatching { ContentType.parse(mime) }
-//            .getOrElse { ContentType.Application.OctetStream }
-//
-//        parts += PartData.FileItem(
-//            provider = { ByteReadChannel(bytes) }, // ✅ Ktor 3.x expects ByteReadChannel
-//            dispose = {},
-//            partHeaders = Headers.build {
-//                append(
-//                    HttpHeaders.ContentDisposition,
-//                    "form-data; name=\"$fileFieldName\"; filename=\"$fileName\""
-//                )
-//                append(HttpHeaders.ContentType, ct.toString())
-//            }
-//        )
-//    }
-//
-//    return post(url) {
-//        headers?.forEach { (k, v) -> header(k, v) }
-//        setBody(MultiPartFormDataContent(parts))
-//    }.body()
-//}

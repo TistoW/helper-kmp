@@ -333,20 +333,6 @@ abstract class StatefulViewModel<STATE : BaseState<R, I, STATE>, R, I> : BaseVie
     fun updateRequest(update: R.() -> R) {
         updateState { copies(request = request?.update()) }
     }
-
-//    fun <T> onLoaded(page: Int, res: Resource<List<T>>) {
-//        val items = res.body ?: listOf()
-//        updateUiState {
-//            copy(
-//                page = page,
-//                hasMore = items.size >= perPage,
-//                totalPage = res.lastPage,
-//                totalSize = res.total,
-//                loadingSize = items.size,
-//                loadedCount = getItems().size + items.size
-//            )
-//        }
-//    }
 }
 
 @Composable

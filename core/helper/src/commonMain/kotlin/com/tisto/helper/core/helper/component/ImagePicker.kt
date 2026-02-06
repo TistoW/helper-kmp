@@ -1,4 +1,4 @@
-package com.tisto.helper.core.helper.utils.media
+package com.tisto.helper.core.helper.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -139,7 +139,7 @@ fun ImagePickerScreen() {
 
 @MobilePreview
 @Composable
-fun MobilePreviewsForm() {
+fun ImagePickerScreenPreview() {
     ZenentaHelperTheme {
         ImagePickerScreen()
     }

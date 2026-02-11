@@ -3,6 +3,7 @@ package com.tisto.helper.core.helper.utils.scanner
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
@@ -11,36 +12,57 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.google.mlkit.common.sdkinternal.MlKitContext
+import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
+import java.util.concurrent.Executors
 
+@androidx.annotation.OptIn(ExperimentalGetImage::class)
+@OptIn(ExperimentalGetImage::class)
 @Composable
 internal actual fun PlatformCameraScanner(
     modifier: Modifier,
     onResult: (BarcodeResult) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
+    // ✅ Jangan jalan di @Preview
+    if (LocalInspectionMode.current) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            Text("Camera disabled in Preview")
+        }
+        return
+    }
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    var granted by remember { mutableStateOf(false) }
+    var granted by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+                    PackageManager.PERMISSION_GRANTED
+        )
+    }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { ok -> granted = ok }
 
     LaunchedEffect(Unit) {
-        permissionLauncher.launch(Manifest.permission.CAMERA)
+        if (!granted) permissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
     if (!granted) {
-        Box(modifier = modifier, contentAlignment = androidx.compose.ui.Alignment.Center) {
-            Column(horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("Izin kamera dibutuhkan")
                 Spacer(Modifier.height(12.dp))
                 Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
@@ -51,71 +73,105 @@ internal actual fun PlatformCameraScanner(
         return
     }
 
+    // ✅ Keep single PreviewView instance
+    val previewView = remember(context) {
+        PreviewView(context).apply {
+            scaleType = PreviewView.ScaleType.FILL_CENTER
+            // ✅ KUNCI anti overlay SurfaceView
+            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+        }
+    }
+
+    DisposableEffect(previewView, lifecycleOwner) {
+        val executor = Executors.newSingleThreadExecutor()
+        val mainExecutor = ContextCompat.getMainExecutor(context)
+
+        var cameraProvider: ProcessCameraProvider? = null
+        var scanner: BarcodeScanner? = null
+        var analysis: ImageAnalysis? = null
+
+        val future = ProcessCameraProvider.getInstance(context)
+        future.addListener({
+            try {
+                cameraProvider = future.get()
+
+                // ✅ ML Kit init fallback (kalau provider manifest tidak jalan)
+                ensureMlKitInitialized(context)
+
+                scanner = BarcodeScanning.getClient()
+
+                val preview = Preview.Builder().build().also {
+                    it.surfaceProvider = previewView.surfaceProvider
+                }
+
+                analysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+
+                var lastEmit = 0L
+                val throttleMs = 700L
+
+                analysis.setAnalyzer(executor) { imageProxy ->
+                    val media = imageProxy.image
+                    if (media == null) {
+                        imageProxy.close()
+                        return@setAnalyzer
+                    }
+
+                    val input = InputImage.fromMediaImage(
+                        media,
+                        imageProxy.imageInfo.rotationDegrees
+                    )
+
+                    scanner.process(input)
+                        .addOnSuccessListener { list ->
+                            val first = list.firstOrNull()
+                            val raw = first?.rawValue
+                            if (!raw.isNullOrEmpty()) {
+                                val now = System.currentTimeMillis()
+                                if (now - lastEmit >= throttleMs) {
+                                    lastEmit = now
+                                    onResult(
+                                        BarcodeResult(
+                                            raw = raw,
+                                            format = first.format.toString()
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        .addOnFailureListener { onError(it) }
+                        .addOnCompleteListener { imageProxy.close() }
+                }
+
+                cameraProvider?.unbindAll()
+                cameraProvider?.bindToLifecycle(
+                    lifecycleOwner,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
+                    analysis
+                )
+
+            } catch (t: Throwable) {
+                onError(t)
+            }
+        }, mainExecutor)
+
+        onDispose {
+            try { analysis?.clearAnalyzer() } catch (_: Throwable) {}
+            try { cameraProvider?.unbindAll() } catch (_: Throwable) {}
+            try { scanner?.close() } catch (_: Throwable) {}
+            try { executor.shutdown() } catch (_: Throwable) {}
+        }
+    }
+
     AndroidView(
         modifier = modifier,
-        factory = { ctx ->
-            PreviewView(ctx).apply { scaleType = PreviewView.ScaleType.FILL_CENTER }
-        },
-        update = { previewView ->
-            startAndroidCamera(
-                context = context,
-                previewView = previewView,
-                lifecycleOwner = lifecycleOwner,
-                onResult = onResult,
-                onError = onError
-            )
-        }
+        factory = { previewView }
     )
 }
 
-@SuppressLint("UnsafeOptInUsageError")
-private fun startAndroidCamera(
-    context: Context,
-    previewView: PreviewView,
-    lifecycleOwner: androidx.lifecycle.LifecycleOwner,
-    onResult: (BarcodeResult) -> Unit,
-    onError: (Throwable) -> Unit,
-) {
-    val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-    cameraProviderFuture.addListener({
-        val cameraProvider = runCatching { cameraProviderFuture.get() }
-            .getOrElse { return@addListener onError(it) }
-
-        val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(previewView.surfaceProvider)
-        }
-
-        val scanner = BarcodeScanning.getClient()
-        val analysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-
-        analysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-            val media = imageProxy.image
-            if (media == null) {
-                imageProxy.close()
-                return@setAnalyzer
-            }
-
-            val input = InputImage.fromMediaImage(media, imageProxy.imageInfo.rotationDegrees)
-            scanner.process(input)
-                .addOnSuccessListener { list ->
-                    val first = list.firstOrNull()
-                    val raw = first?.rawValue
-                    if (!raw.isNullOrEmpty()) {
-                        onResult(BarcodeResult(raw = raw, format = first.format.toString()))
-                    }
-                }
-                .addOnFailureListener { onError(it) }
-                .addOnCompleteListener { imageProxy.close() }
-        }
-
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            CameraSelector.DEFAULT_BACK_CAMERA,
-            preview,
-            analysis
-        )
-    }, ContextCompat.getMainExecutor(context))
+private fun ensureMlKitInitialized(context: Context) {
+    val app = context.applicationContext
+    runCatching { MlKitContext.getInstance() }
 }

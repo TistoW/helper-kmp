@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import com.tisto.helper.core.helper.ui.theme.Colors
 import com.tisto.helper.core.helper.ui.theme.Spacing
@@ -24,22 +25,27 @@ data class BarcodeResult(
 fun BarcodeScannerView(
     modifier: Modifier = Modifier,
     title: String = "Scan Barcode",
+    isPreview: Boolean = false,
     onResult: (BarcodeResult) -> Unit
 ) {
     var errorText by remember { mutableStateOf<String?>(null) }
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(Colors.Black)
+            .background(Colors.Black) // ✅ ok
+            .clipToBounds()           // ✅ tambah ini
     ) {
-        PlatformCameraScanner(
-            modifier = Modifier.fillMaxSize(),
-            onResult = onResult,
-            onError = { errorText = it.message ?: "Camera error" }
-        )
 
-        // Top bar overlay
+        if (isPreview){
+            PlatformCameraScanner(
+                modifier = Modifier.fillMaxSize(), // ✅ biar kamera isi container
+                onResult = onResult,
+                onError = { errorText = it.message ?: "Camera error" }
+            )
+        }
+
+
+        // overlays tetap sama...
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,7 +61,6 @@ fun BarcodeScannerView(
             )
         }
 
-        // Hint / error
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -88,12 +93,14 @@ fun BarcodeScannerView(
     }
 }
 
+
 @TabletPreview
 @Composable
 fun AttendancePreview() {
     ZenentaHelperTheme {
         BarcodeScannerView(
             modifier = Modifier.fillMaxSize(),
+            isPreview = true,
             onResult = { res ->
                 logs("BarcodeScannerView: ${res.raw}")
 //                        onScanned(res.raw)

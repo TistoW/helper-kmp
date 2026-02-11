@@ -9,12 +9,15 @@ import platform.CoreGraphics.CGRectMake
 import platform.UIKit.UIView
 import platform.darwin.NSObject
 import platform.darwin.dispatch_get_main_queue
+import platform.AudioToolbox.AudioServicesPlaySystemSound
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 internal actual fun PlatformCameraScanner(
     modifier: Modifier,
+    scanCooldownMs: Long,
     onResult: (BarcodeResult) -> Unit,
+    onScanEffect: (() -> Unit)?,
     onError: (Throwable) -> Unit,
 ) {
     val controller = remember { IOSScannerController(onResult, onError) }
@@ -127,5 +130,11 @@ private class IOSScannerController(
         if (!raw.isNullOrEmpty()) {
             onResult(BarcodeResult(raw = raw, format = first.type))
         }
+    }
+}
+
+actual object BeepPlayer {
+    actual fun play() {
+        runCatching { AudioServicesPlaySystemSound(1057u) }
     }
 }

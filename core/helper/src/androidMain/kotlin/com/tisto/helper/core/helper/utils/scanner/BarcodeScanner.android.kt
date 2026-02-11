@@ -1,7 +1,6 @@
 package com.tisto.helper.core.helper.utils.scanner
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,16 +24,27 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executors
+import android.media.AudioManager
+import android.media.ToneGenerator
+
+actual object BeepPlayer {
+    private val tone by lazy { ToneGenerator(AudioManager.STREAM_MUSIC, 90) }
+
+    actual fun play() {
+        runCatching { tone.startTone(ToneGenerator.TONE_PROP_BEEP, 80) }
+    }
+}
 
 @androidx.annotation.OptIn(ExperimentalGetImage::class)
 @OptIn(ExperimentalGetImage::class)
 @Composable
 internal actual fun PlatformCameraScanner(
     modifier: Modifier,
+    scanCooldownMs: Long,
     onResult: (BarcodeResult) -> Unit,
+    onScanEffect: (() -> Unit)?,
     onError: (Throwable) -> Unit,
 ) {
-    // ✅ Jangan jalan di @Preview
     if (LocalInspectionMode.current) {
         Box(modifier = modifier, contentAlignment = Alignment.Center) {
             Text("Camera disabled in Preview")
@@ -73,14 +83,18 @@ internal actual fun PlatformCameraScanner(
         return
     }
 
-    // ✅ Keep single PreviewView instance
     val previewView = remember(context) {
         PreviewView(context).apply {
             scaleType = PreviewView.ScaleType.FILL_CENTER
-            // ✅ KUNCI anti overlay SurfaceView
             implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         }
     }
+
+    // ✅ cooldown gate (shared across analyzer calls)
+    val cooldownMsState by rememberUpdatedState(scanCooldownMs.coerceAtLeast(0L))
+    val onResultState by rememberUpdatedState(onResult)
+    val onErrorState by rememberUpdatedState(onError)
+    val onScanEffectState by rememberUpdatedState(onScanEffect)
 
     DisposableEffect(previewView, lifecycleOwner) {
         val executor = Executors.newSingleThreadExecutor()
@@ -90,14 +104,15 @@ internal actual fun PlatformCameraScanner(
         var scanner: BarcodeScanner? = null
         var analysis: ImageAnalysis? = null
 
+        // timestamp terakhir emit (thread-safe enough utk single analyzer thread)
+        var nextAllowedAt = 0L
+
         val future = ProcessCameraProvider.getInstance(context)
         future.addListener({
             try {
                 cameraProvider = future.get()
 
-                // ✅ ML Kit init fallback (kalau provider manifest tidak jalan)
-                ensureMlKitInitialized(context)
-
+                // ✅ jangan pakai MlKitContext internal. Hapus ensureMlKitInitialized.
                 scanner = BarcodeScanning.getClient()
 
                 val preview = Preview.Builder().build().also {
@@ -108,12 +123,16 @@ internal actual fun PlatformCameraScanner(
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
 
-                var lastEmit = 0L
-                val throttleMs = 700L
-
                 analysis.setAnalyzer(executor) { imageProxy ->
                     val media = imageProxy.image
                     if (media == null) {
+                        imageProxy.close()
+                        return@setAnalyzer
+                    }
+
+                    // ✅ cooldown: jangan proses kalau belum waktunya
+                    val now = System.currentTimeMillis()
+                    if (now < nextAllowedAt) {
                         imageProxy.close()
                         return@setAnalyzer
                     }
@@ -127,20 +146,23 @@ internal actual fun PlatformCameraScanner(
                         .addOnSuccessListener { list ->
                             val first = list.firstOrNull()
                             val raw = first?.rawValue
+
                             if (!raw.isNullOrEmpty()) {
-                                val now = System.currentTimeMillis()
-                                if (now - lastEmit >= throttleMs) {
-                                    lastEmit = now
-                                    onResult(
-                                        BarcodeResult(
-                                            raw = raw,
-                                            format = first.format.toString()
-                                        )
+                                // ✅ set next allowed time
+                                val cooldown = cooldownMsState
+                                nextAllowedAt = System.currentTimeMillis() + cooldown
+
+                                // ✅ trigger effect + callback on main thread
+                                onScanEffectState?.invoke()
+                                onResultState(
+                                    BarcodeResult(
+                                        raw = raw,
+                                        format = first.format.toString()
                                     )
-                                }
+                                )
                             }
                         }
-                        .addOnFailureListener { onError(it) }
+                        .addOnFailureListener { onErrorState(it) }
                         .addOnCompleteListener { imageProxy.close() }
                 }
 
@@ -151,9 +173,8 @@ internal actual fun PlatformCameraScanner(
                     preview,
                     analysis
                 )
-
             } catch (t: Throwable) {
-                onError(t)
+                onErrorState(t)
             }
         }, mainExecutor)
 

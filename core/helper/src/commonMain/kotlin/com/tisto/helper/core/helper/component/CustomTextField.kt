@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -662,17 +663,16 @@ fun CustomTextField(
                         if (itemOptions.isNotEmpty()) expanded = !expanded
                     }
             ) {
-                Box(
+                IconButton(
+                    onClick = { endIconOnClick() },
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(end = 4.dp)
                         .width(50.dp)
                         .padding(7.dp)
-//                        .background(Color(0x689A9A9A))
-                        .align(Alignment.CenterEnd).clickable {
-                            endIconOnClick()
-                        }
-                )
+//                      .background(Color(0x689A9A9A))
+                        .align(Alignment.CenterEnd)
+                ) {}
             }
         }
 

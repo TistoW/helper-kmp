@@ -1,5 +1,7 @@
 package com.tisto.helper.core.helper.utils.ext
 
+import kotlinx.serialization.json.Json
+
 const val dateFormat = "yyyy-MM-dd"
 
 fun logs(message: String? = "message") {
@@ -99,4 +101,16 @@ fun <T> T?.isNull(): Boolean {
 
 fun <T> T?.isNotNull(): Boolean {
     return this != null
+}
+
+object JsonHelper {
+    val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        encodeDefaults = true
+    }
+}
+
+inline fun <reified T> T.toJson(): String {
+    return JsonHelper.json.encodeToString(this)
 }

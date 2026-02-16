@@ -19,5 +19,6 @@ data class NavItem(
     var icon: DrawableResource? = null,
     var subNavItems: List<NavItem> = emptyList(),
     var isLock: Boolean = false,
+    var isAvailable: Boolean = false,
     var screen: (@Composable () -> Unit)? = null,
 )

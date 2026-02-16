@@ -50,13 +50,16 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -223,6 +226,12 @@ class FormScopeImpl(private val focusRequesters: List<FocusRequester>) {
     }
 }
 
+enum class TextTransform {
+    NONE,
+    UPPERCASE,
+    LOWERCASE,
+    CAPITALIZE
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -274,6 +283,8 @@ fun CustomTextField(
     nextFocusRequester: FocusRequester? = null,
     previousFocusRequester: FocusRequester? = null,
     autoHandlePassword: Boolean = true,
+    allCaps: Boolean = false,
+    textTransform: TextTransform = TextTransform.NONE,
     onEnter: (() -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -281,6 +292,7 @@ fun CustomTextField(
     val isFocused = interactionSource.collectIsFocusedAsState().value
     val focusManager = LocalFocusManager.current
     val isWeb = remember { getPlatform().name.contains("WebJs") }
+    val transform: TextTransform = if (allCaps) TextTransform.UPPERCASE else textTransform
 
     // ✅ Password visibility state
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -341,11 +353,37 @@ fun CustomTextField(
     val finalEndIcon = endIcon ?: passwordToggleIcon
 
     // ✅ Determine visual transformation
+//    val finalVisualTransformation = when {
+//        visualTransformation != null -> visualTransformation
+//        isPasswordField && autoHandlePassword && !isPasswordVisible -> PasswordVisualTransformation()
+//        else -> VisualTransformation.None
+//    }
+
     val finalVisualTransformation = when {
         visualTransformation != null -> visualTransformation
-        isPasswordField && autoHandlePassword && !isPasswordVisible -> PasswordVisualTransformation()
+
+        isPasswordField && autoHandlePassword && !isPasswordVisible ->
+            PasswordVisualTransformation()
+
+        transform == TextTransform.UPPERCASE ->
+            VisualTransformation { text ->
+                TransformedText(
+                    AnnotatedString(text.text.uppercase()),
+                    OffsetMapping.Identity
+                )
+            }
+
+        transform == TextTransform.LOWERCASE ->
+            VisualTransformation { text ->
+                TransformedText(
+                    AnnotatedString(text.text.lowercase()),
+                    OffsetMapping.Identity
+                )
+            }
+
         else -> VisualTransformation.None
     }
+
 
     // ✅ Determine end icon click handler
     val finalEndIconOnClick: () -> Unit = {
@@ -473,8 +511,31 @@ fun CustomTextField(
                             composition = null
                         )
                     } else newV
-                    onValueChange(next.text)
-                    tfv = next
+
+
+//                    onValueChange(next.text)
+//                    tfv = next
+
+                    val transformedText = when (transform) {
+                        TextTransform.UPPERCASE -> next.text.uppercase()
+                        TextTransform.LOWERCASE -> next.text.lowercase()
+                        TextTransform.CAPITALIZE ->
+                            next.text.split(" ")
+                                .joinToString(" ") {
+                                    it.replaceFirstChar { c ->
+                                        if (c.isLowerCase()) c.titlecase() else c.toString()
+                                    }
+                                }
+
+                        else -> next.text
+                    }
+
+                    onValueChange(transformedText)
+
+                    tfv = next.copy(
+                        text = transformedText,
+                        selection = TextRange(transformedText.length)
+                    )
                 }
             },
             enabled = enabled,

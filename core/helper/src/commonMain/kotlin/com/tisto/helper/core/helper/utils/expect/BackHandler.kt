@@ -60,7 +60,7 @@ fun ProvideBackDispatcher(content: @Composable () -> Unit) {
  * Use this in any screen like Android BackHandler.
  */
 @Composable
-fun PlatformBackHandler(
+fun CustomBackHandler(
     enabled: Boolean = true,
     onBack: () -> Unit
 ) {

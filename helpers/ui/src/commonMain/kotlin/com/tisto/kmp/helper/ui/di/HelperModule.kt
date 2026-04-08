@@ -1,6 +1,6 @@
 package com.tisto.kmp.helper.ui.di
 
-import com.tisto.helper.core.helper.utils.prefs.PrefManager
+import com.tisto.kmp.helper.utils.prefs.PrefManager
 import org.koin.dsl.module
 
 val helperModule = module {

@@ -19,14 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.ic_asset_close
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.utils.ext.MobilePreview
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.ic_asset_close
 import org.jetbrains.compose.resources.painterResource
 
 // ========================================

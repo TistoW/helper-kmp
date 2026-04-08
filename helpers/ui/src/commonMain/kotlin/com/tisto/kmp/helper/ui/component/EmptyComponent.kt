@@ -15,13 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.hasil_pencarian_tidak_ditemukan
-import helper.helpers.helpers.generated.resources.ic_asset_list
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.hasil_pencarian_tidak_ditemukan
+import helper.helpers.ui.generated.resources.ic_asset_list
 
 @Composable
 fun EmptyState(

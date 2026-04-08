@@ -65,19 +65,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tisto.helper.core.helper.getPlatform
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import com.tisto.helper.core.helper.utils.ext.TabletPreview
-import com.tisto.helper.core.helper.utils.ext.def
+import com.tisto.kmp.helper.ui.getPlatformUi
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.utils.ext.def
 import org.jetbrains.compose.resources.vectorResource
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.ic_asset_close
-import helper.helpers.helpers.generated.resources.ic_search
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.ic_asset_close
+import helper.helpers.ui.generated.resources.ic_search
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost
@@ -291,7 +291,7 @@ fun CustomTextField(
     var expanded by remember { mutableStateOf(false) }
     val isFocused = interactionSource.collectIsFocusedAsState().value
     val focusManager = LocalFocusManager.current
-    val isWeb = remember { getPlatform().name.contains("WebJs") }
+    val isWeb = remember { getPlatformUi().name.contains("WebJs") }
     val transform: TextTransform = if (allCaps) TextTransform.UPPERCASE else textTransform
 
     // ✅ Password visibility state

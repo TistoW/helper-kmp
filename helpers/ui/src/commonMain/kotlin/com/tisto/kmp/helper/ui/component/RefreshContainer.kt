@@ -6,7 +6,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.utils.ext.isMobilePhone
 
 @Composable
 fun RefreshContainer(

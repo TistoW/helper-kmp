@@ -8,8 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.utils.model.PickedImage
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.dialogs.FileKitType
@@ -21,13 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.decodeToImageBitmap
 
-
-@Immutable
-data class PickedImage(
-    val file: PlatformFile,
-    val name: String,
-    val mimeType: String?,
-)
 
 @Stable
 class ImagePickerState internal constructor(

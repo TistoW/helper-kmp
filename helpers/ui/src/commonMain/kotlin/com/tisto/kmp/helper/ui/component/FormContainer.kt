@@ -16,15 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import com.tisto.helper.core.helper.utils.ext.ScreenConfig
-import com.tisto.helper.core.helper.utils.ext.TabletPreview
-import com.tisto.helper.core.helper.utils.ext.shorten
-import com.tisto.helper.core.helper.utils.ext.title
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.utils.ext.ScreenConfig
+import com.tisto.kmp.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.utils.ext.shorten
+import com.tisto.kmp.helper.utils.ext.title
 
 @Composable
 fun <ITEM> FormContainer(

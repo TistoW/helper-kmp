@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.tisto.helper.core.helper.utils.expect.ProvideBackDispatcher
+import com.tisto.kmp.helper.ui.utils.expect.ProvideBackDispatcher
 import com.tisto.helper.di.getAppModules
 import org.koin.compose.KoinApplication
 

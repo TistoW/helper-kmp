@@ -19,20 +19,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.base.BaseUiState
-import com.tisto.helper.core.helper.model.FilterGroup
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import com.tisto.helper.core.helper.utils.ext.ScreenConfig
-import com.tisto.helper.core.helper.utils.ext.TabletPreview
-import com.tisto.helper.core.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.network.base.BaseUiState
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.utils.ext.ScreenConfig
+import com.tisto.kmp.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.utils.model.FilterGroup
 import org.jetbrains.compose.resources.vectorResource
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.ic_asset_close
-import helper.helpers.helpers.generated.resources.ic_search
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.ic_asset_close
+import helper.helpers.ui.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -217,7 +217,7 @@ fun <STATE, ITEMS> ListScaffoldWeb(
                 if (items.isNotEmpty()) {
                     item(key = "pagination") {
                         TablePaginationFooter(
-                            rowsPerPage = uiState.perPage,
+                            rowsPerPage = uiState.pageLimit,
                             totalItems = uiState.totalSize,
                             currentPage = uiState.page,
                             onNextPage = onNextPage,

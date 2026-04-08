@@ -5,4 +5,6 @@ interface Platform {
     val type: String
 }
 
-expect fun getPlatform(): Platform
+fun getPlatform() {
+    
+}

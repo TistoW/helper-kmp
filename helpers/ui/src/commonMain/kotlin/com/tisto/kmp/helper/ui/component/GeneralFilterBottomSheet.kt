@@ -39,22 +39,21 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.model.FilterGroup
-import com.tisto.helper.core.helper.model.FilterItem
-import com.tisto.helper.core.helper.model.FilterType
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.utils.model.FilterGroup
+import com.tisto.kmp.helper.utils.model.FilterItem
+import com.tisto.kmp.helper.utils.model.FilterType
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.*
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.*
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull
 import kotlin.collections.forEach
-import kotlin.collections.set
 import kotlin.collections.toMutableMap
 
 @Composable

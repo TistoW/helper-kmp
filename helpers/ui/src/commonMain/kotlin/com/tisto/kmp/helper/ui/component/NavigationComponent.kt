@@ -37,17 +37,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tisto.helper.core.helper.model.NavItem
-import com.tisto.helper.core.helper.model.Navigation
-import com.tisto.helper.core.helper.ui.theme.Colors
-import com.tisto.helper.core.helper.ui.theme.Radius
-import com.tisto.helper.core.helper.ui.theme.Spacing
-import com.tisto.helper.core.helper.ui.theme.TextAppearance
-import com.tisto.helper.core.helper.utils.ext.def
+import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.Radius
+import com.tisto.kmp.helper.ui.theme.Spacing
+import com.tisto.kmp.helper.ui.theme.TextAppearance
+import com.tisto.kmp.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.model.NavItem
+import com.tisto.kmp.helper.utils.model.Navigation
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import helper.helpers.helpers.generated.resources.Res
-import helper.helpers.helpers.generated.resources.*
+import helper.helpers.ui.generated.resources.Res
+import helper.helpers.ui.generated.resources.*
 
 class UserProfile(
     val name: String = "",

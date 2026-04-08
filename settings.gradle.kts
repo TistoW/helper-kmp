@@ -33,7 +33,6 @@ plugins {
 }
 
 include(":composeApp")
-include(":helpers:helpers")
 include(":helpers:network")
 include(":helpers:utils")
 include(":helpers:ui")

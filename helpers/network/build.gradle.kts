@@ -106,7 +106,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.tisto.kmp.helper.newtork"
+    namespace = "com.tisto.kmp.helper.network"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

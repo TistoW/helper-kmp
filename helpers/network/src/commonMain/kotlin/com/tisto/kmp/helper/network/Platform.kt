@@ -1,4 +1,4 @@
-package com.tisto.kmp.helper.newtork
+package com.tisto.kmp.helper.network
 
 interface PlatformNetwork {
     val name: String

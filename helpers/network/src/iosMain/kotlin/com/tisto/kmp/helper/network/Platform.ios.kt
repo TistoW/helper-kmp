@@ -1,4 +1,4 @@
-package com.tisto.kmp.helper.newtork
+package com.tisto.kmp.helper.network
 
 import platform.UIKit.UIDevice
 

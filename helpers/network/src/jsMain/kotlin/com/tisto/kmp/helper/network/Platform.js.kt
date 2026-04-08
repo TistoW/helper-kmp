@@ -1,4 +1,4 @@
-package com.tisto.kmp.helper.newtork
+package com.tisto.kmp.helper.network
 
 class JsPlatform : PlatformNetwork {
     override val name: String = "WebJs with Kotlin/JS"

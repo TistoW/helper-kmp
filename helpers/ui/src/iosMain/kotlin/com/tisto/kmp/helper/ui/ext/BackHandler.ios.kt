@@ -3,7 +3,7 @@ package com.tisto.kmp.helper.ui.ext
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {
+actual fun BackHandlerExpect(enabled: Boolean, onBack: () -> Unit) {
 }
 
 @Composable

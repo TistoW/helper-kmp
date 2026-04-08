@@ -10,7 +10,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.DisposableHandle
 
 @Composable
-expect fun BackHandler(enabled: Boolean = true, onBack: () -> Unit)
+expect fun BackHandlerExpect(enabled: Boolean = true, onBack: () -> Unit)
 
 @Stable
 class BackDispatcher {
@@ -60,7 +60,7 @@ fun ProvideBackDispatcher(content: @Composable () -> Unit) {
  * Use this in any screen like Android BackHandler.
  */
 @Composable
-fun CustomBackHandler(
+fun BackHandler(
     enabled: Boolean = true,
     onBack: () -> Unit
 ) {

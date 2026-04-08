@@ -7,7 +7,7 @@ import kotlinx.browser.window
 import org.w3c.dom.events.EventListener
 
 @Composable
-actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {
+actual fun BackHandlerExpect(enabled: Boolean, onBack: () -> Unit) {
     LaunchedEffect(enabled) {
         if (enabled) {
             window.onpopstate = { onBack() }

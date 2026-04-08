@@ -12,7 +12,7 @@ import androidx.compose.ui.input.key.type
 
 
 @Composable
-actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {
+actual fun BackHandlerExpect(enabled: Boolean, onBack: () -> Unit) {
 }
 
 @Composable

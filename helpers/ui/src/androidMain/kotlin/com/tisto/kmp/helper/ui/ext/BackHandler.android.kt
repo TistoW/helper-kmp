@@ -15,6 +15,6 @@ internal actual fun PlatformBackDispatcherHost(
 }
 
 @Composable
-actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {
+actual fun BackHandlerExpect(enabled: Boolean, onBack: () -> Unit) {
     androidx.activity.compose.BackHandler(enabled, onBack)
 }

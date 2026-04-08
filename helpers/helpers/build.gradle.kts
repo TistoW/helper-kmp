@@ -40,7 +40,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
 
-            implementation(project(":helpers:network"))
+            implementation(project(":helpers:ui"))
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

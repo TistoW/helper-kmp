@@ -41,7 +41,7 @@ actual object BeepPlayer {
 internal actual fun PlatformCameraScanner(
     modifier: Modifier,
     scanCooldownMs: Long,
-    onResult: (BarcodeResult) -> Unit,
+    onResult: (com.tisto.kmp.helper.ui.utils.scanner.BarcodeResult) -> Unit,
     onScanEffect: (() -> Unit)?,
     onError: (Throwable) -> Unit,
 ) {

@@ -14,8 +14,12 @@ actual class AppExitHandler(private val activity: Activity?) {
 }
 
 @Composable
-actual fun rememberAppExitHandler(): AppExitHandler {
+actual fun rememberAppExitHandler(): com.tisto.kmp.helper.ui.utils.ext.AppExitHandler {
     val context = LocalContext.current
     val activity = context as? Activity
-    return remember(activity) { AppExitHandler(activity) }
+    return remember(activity) {
+        _root_ide_package_.com.tisto.kmp.helper.ui.utils.ext.AppExitHandler(
+            activity
+        )
+    }
 }

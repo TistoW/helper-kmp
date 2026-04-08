@@ -5,7 +5,7 @@ import androidx.activity.compose.BackHandler
 
 @Composable
 internal actual fun PlatformBackDispatcherHost(
-    dispatcher: BackDispatcher,
+    dispatcher: com.tisto.kmp.helper.ui.utils.expect.BackDispatcher,
     content: @Composable () -> Unit
 ) {
     BackHandler(enabled = dispatcher.canGoBack) {

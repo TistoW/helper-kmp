@@ -1,10 +1,9 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -16,35 +15,30 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    
-    jvm()
-    
-    js {
-        browser {
-            commonWebpackConfig {
-                cssSupport {
-                    enabled.set(true)
-                }
-            }
+
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "helper-ui"
+            isStatic = true
         }
-        binaries.executable()
     }
-    
+
+    jvm()
+
+    js {
+        browser()
+    }
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
-        binaries.executable()
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.activity.compose)
-        }
         commonMain.dependencies {
-
-            implementation(project(":helper:helpers"))
-
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -55,53 +49,55 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.material.icons.extended)
 
+            // Ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+
+            // ktor socket
+            implementation(libs.ktor.client.websockets)
+
             // Kotlinx
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
 
             // Koin
             implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
 
             // Helper
             implementation(libs.uuid)
+            implementation(libs.kotlinx.datetime)
+
             implementation(libs.filekit.dialogs.compose)
+            implementation(libs.filekit.core)
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.activity.compose)
+
+            implementation(libs.androidx.camera.camera2)
+            implementation(libs.androidx.camera.lifecycle)
+            implementation(libs.androidx.camera.view)
+            implementation(libs.barcode.scanning)
         }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.ktor.client.cio)
         }
-    }
-}
 
-android {
-    namespace = "com.tisto.helper"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
 
-    defaultConfig {
-        applicationId = "com.tisto.helper"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -109,14 +105,15 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
-compose.desktop {
-    application {
-        mainClass = "com.tisto.helper.MainKt"
+android {
+    namespace = "com.tisto.kmp.helper.ui"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.tisto.helper"
-            packageVersion = "1.0.0"
-        }
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

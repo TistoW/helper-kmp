@@ -1,4 +1,4 @@
-rootProject.name = "helper"
+rootProject.name = "kmp-helper"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -33,4 +33,7 @@ plugins {
 }
 
 include(":composeApp")
-include(":core:helper")
+include(":helper:helpers")
+include(":helper:network")
+include(":helper:utils")
+include(":helper:ui")

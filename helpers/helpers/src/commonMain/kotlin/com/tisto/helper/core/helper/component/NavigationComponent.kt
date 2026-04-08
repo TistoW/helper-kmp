@@ -46,8 +46,8 @@ import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.utils.ext.def
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.*
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.*
 
 class UserProfile(
     val name: String = "",

@@ -25,8 +25,8 @@ import com.tisto.helper.core.helper.ui.theme.Spacing
 import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import com.tisto.helper.core.helper.utils.ext.MobilePreview
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.ic_asset_close
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.ic_asset_close
 import org.jetbrains.compose.resources.painterResource
 
 // ========================================

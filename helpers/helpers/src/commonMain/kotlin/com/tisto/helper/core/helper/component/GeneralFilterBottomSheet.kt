@@ -48,8 +48,8 @@ import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.*
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.*
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull

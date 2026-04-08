@@ -43,7 +43,7 @@ kotlin {
         }
         commonMain.dependencies {
 
-            implementation(project(":helper:helpers"))
+            implementation(project(":helpers:helpers"))
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

@@ -75,9 +75,9 @@ import com.tisto.helper.core.helper.utils.ext.MobilePreview
 import com.tisto.helper.core.helper.utils.ext.TabletPreview
 import com.tisto.helper.core.helper.utils.ext.def
 import org.jetbrains.compose.resources.vectorResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.ic_asset_close
-import kmp_helper.helper.helpers.generated.resources.ic_search
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.ic_asset_close
+import helper.helpers.helpers.generated.resources.ic_search
 import kotlin.collections.isNotEmpty
 import kotlin.let
 import kotlin.ranges.coerceAtMost

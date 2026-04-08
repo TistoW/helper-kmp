@@ -28,9 +28,9 @@ import com.tisto.helper.core.helper.utils.ext.isMobilePhone
 import com.tisto.helper.core.helper.utils.ext.reformatDate
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.vectorResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.ic_asset_close
-import kmp_helper.helper.helpers.generated.resources.ic_search
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.ic_asset_close
+import helper.helpers.helpers.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

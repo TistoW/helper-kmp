@@ -19,9 +19,9 @@ import com.tisto.helper.core.helper.ui.theme.TextAppearance
 import com.tisto.helper.core.helper.ui.theme.ZenentaHelperTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.hasil_pencarian_tidak_ditemukan
-import kmp_helper.helper.helpers.generated.resources.ic_asset_list
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.hasil_pencarian_tidak_ditemukan
+import helper.helpers.helpers.generated.resources.ic_asset_list
 
 @Composable
 fun EmptyState(

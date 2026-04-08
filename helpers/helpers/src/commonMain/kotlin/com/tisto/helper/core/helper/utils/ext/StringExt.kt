@@ -2,9 +2,9 @@ package com.tisto.helper.core.helper.utils.ext
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.stringResource
-import kmp_helper.helper.helpers.generated.resources.Res
-import kmp_helper.helper.helpers.generated.resources.detail
-import kmp_helper.helper.helpers.generated.resources.tambah
+import helper.helpers.helpers.generated.resources.Res
+import helper.helpers.helpers.generated.resources.detail
+import helper.helpers.helpers.generated.resources.tambah
 import kotlin.random.Random
 import kotlin.time.Clock
 

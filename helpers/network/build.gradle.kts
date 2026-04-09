@@ -48,12 +48,13 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.material.icons.extended)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.lifecycle.viewmodelCompose)
+            implementation(libs.lifecycle.runtimeCompose)
+            implementation(libs.compose.material.icons.extended)
 
             // Ktor
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.logging)
@@ -78,6 +79,7 @@ kotlin {
         }
 
         androidMain.dependencies {
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.activity.compose)
 
@@ -88,18 +90,22 @@ kotlin {
         }
 
         iosMain.dependencies {
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.darwin)
         }
 
         jvmMain.dependencies {
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.cio)
         }
 
         jsMain.dependencies {
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.js)
         }
 
         wasmJsMain.dependencies {
+            implementation(project.dependencies.platform(libs.ktor.bom))
             implementation(libs.ktor.client.js)
         }
     }

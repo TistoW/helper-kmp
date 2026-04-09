@@ -67,13 +67,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tisto.kmp.helper.ui.ext.MobilePreview
 import com.tisto.kmp.helper.ui.ext.TabletPreview
-import com.tisto.kmp.helper.ui.getPlatformUi
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
 import com.tisto.kmp.helper.utils.ext.def
+import com.tisto.kmp.helper.utils.getPlatform
 import org.jetbrains.compose.resources.vectorResource
 import helper.helpers.ui.generated.resources.Res
 import helper.helpers.ui.generated.resources.ic_asset_close
@@ -294,7 +294,7 @@ fun CustomTextField(
     var expanded by remember { mutableStateOf(false) }
     val isFocused = interactionSource.collectIsFocusedAsState().value
     val focusManager = LocalFocusManager.current
-    val isWeb = remember { getPlatformUi().name.contains("WebJs") }
+    val isWeb = remember { getPlatform().platform.contains("web") }
     val transform: TextTransform = if (allCaps) TextTransform.UPPERCASE else textTransform
 
     // ✅ Password visibility state

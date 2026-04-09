@@ -1,8 +1,9 @@
 package com.tisto.kmp.helper.utils
 
-interface PlatformUtils {
+interface Platform {
     val name: String
     val type: String
+    val platform: String
 }
 
-expect fun getPlatformUtils(): PlatformUtils
+expect fun getPlatform(): Platform

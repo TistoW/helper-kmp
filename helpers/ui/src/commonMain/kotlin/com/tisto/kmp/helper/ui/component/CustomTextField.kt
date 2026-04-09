@@ -65,14 +65,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tisto.kmp.helper.ui.ext.MobilePreview
+import com.tisto.kmp.helper.ui.ext.TabletPreview
 import com.tisto.kmp.helper.ui.getPlatformUi
 import com.tisto.kmp.helper.ui.theme.Colors
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.utils.ext.MobilePreview
-import com.tisto.kmp.helper.utils.ext.TabletPreview
 import com.tisto.kmp.helper.utils.ext.def
 import org.jetbrains.compose.resources.vectorResource
 import helper.helpers.ui.generated.resources.Res
@@ -109,7 +109,7 @@ class FormScopeImpl(private val focusRequesters: List<FocusRequester>) {
     private var currentIndex = 0
 
     @Composable
-    fun CustomTextFieldForm(
+    fun CustomTextField(
         value: String = "",
         onValueChange: (String) -> Unit = {},
         modifier: Modifier = Modifier,
@@ -152,9 +152,10 @@ class FormScopeImpl(private val focusRequesters: List<FocusRequester>) {
         strokeWidth: Dp = 1.dp,
         focusedStrokeWidth: Dp? = null,
         strokeColor: Color = Colors.Gray2,
-        strokeColorOnFocused: Color = Colors.ColorPrimary,
+        strokeColorOnFocused: Color = Colors.Gray2,
         autoHandlePassword: Boolean = true,
         onEnter: (() -> Unit)? = null,
+        onItemSelected: ((Int) -> Unit)? = null,
     ) {
         val myIndex = currentIndex
         // ✅ Increment index
@@ -217,7 +218,8 @@ class FormScopeImpl(private val focusRequesters: List<FocusRequester>) {
             nextFocusRequester = if (editable) focusRequesters.getOrNull(myIndex + 1) else null,
             previousFocusRequester = if (editable) focusRequesters.getOrNull(myIndex - 1) else null,
             autoHandlePassword = autoHandlePassword,
-            onEnter = onEnter
+            onEnter = onEnter,
+            onItemSelected = onItemSelected
         )
     }
 
@@ -275,7 +277,7 @@ fun CustomTextField(
     style: TextFieldStyle = TextFieldStyle.OUTLINED,
     backgroundColor: Color = Color.Transparent,
     focusedBackgroundColor: Color? = null,
-    strokeWidth: Dp = 1.dp,
+    strokeWidth: Dp = 0.5.dp,
     focusedStrokeWidth: Dp? = null,
     strokeColor: Color = Colors.Gray2,
     strokeColorOnFocused: Color = Color.Black,
@@ -286,6 +288,7 @@ fun CustomTextField(
     allCaps: Boolean = false,
     textTransform: TextTransform = TextTransform.NONE,
     onEnter: (() -> Unit)? = null,
+    onItemSelected: ((Int) -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var expanded by remember { mutableStateOf(false) }
@@ -731,7 +734,6 @@ fun CustomTextField(
                         .padding(end = 4.dp)
                         .width(50.dp)
                         .padding(7.dp)
-//                      .background(Color(0x689A9A9A))
                         .align(Alignment.CenterEnd)
                 ) {}
             }
@@ -742,7 +744,10 @@ fun CustomTextField(
                 expanded = expanded,
                 onDismiss = { expanded = false },
                 items = itemOptions,
-                onSelected = onValueChange
+                onSelected = {
+                    onValueChange(it)
+                    onItemSelected?.invoke(itemOptions.indexOf(it))
+                }
             )
         }
     }
@@ -996,7 +1001,7 @@ fun EditTextCustomExamples() {
 @TabletPreview
 @Composable
 fun TabletPreviews() {
-    ZenentaHelperTheme {
+    HelperTheme {
         EditTextCustomExamples()
     }
 
@@ -1005,7 +1010,7 @@ fun TabletPreviews() {
 @MobilePreview
 @Composable
 fun MobilePreviews() {
-    ZenentaHelperTheme {
+    HelperTheme {
         EditTextCustomExamples()
     }
 }

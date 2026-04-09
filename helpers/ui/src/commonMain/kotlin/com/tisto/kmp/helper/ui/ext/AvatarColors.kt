@@ -1,4 +1,4 @@
-package com.tisto.kmp.helper.utils.ext
+package com.tisto.kmp.helper.ui.ext
 
 import androidx.compose.ui.graphics.Color
 
@@ -12,7 +12,7 @@ val AvatarColors = listOf(
     Color(0xFFE1F5FE), // light blue
 )
 
-fun avatarColorFromText(text: String): Color {
+fun colorFromText(text: String): Color {
     if (text.isEmpty()) return AvatarColors.first()
 
     val char = text.first().uppercaseChar()

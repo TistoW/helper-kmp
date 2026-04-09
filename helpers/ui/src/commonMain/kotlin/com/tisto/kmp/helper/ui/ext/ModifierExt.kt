@@ -1,4 +1,4 @@
-package com.tisto.kmp.helper.utils.ext
+package com.tisto.kmp.helper.ui.ext
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.WindowInsets

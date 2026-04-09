@@ -36,6 +36,7 @@ fun ButtonNormal(
     contentColor: Color = Color.White,
     disabledBackgroundColor: Color = Colors.Gray4,
     strokeWidth: Dp = 0.dp, // ✅ 0.dp = filled, >0.dp = outlined
+    elevation: Dp = 0.dp, // ✅ 0.dp = filled, >0.dp = outlined
     cornerRadius: Dp = Radius.normal,
     strokeColor: Color = Colors.ColorPrimary,
     textColor: Color = Colors.White,
@@ -59,12 +60,12 @@ fun ButtonNormal(
             disabledContentColor = Colors.Gray3
         ),
         border = if (isOutlined) {
-            BorderStroke(strokeWidth, if (enabled && !isLoading) strokeColor else Colors.Gray4)
+            BorderStroke(strokeWidth, if (enabled) strokeColor else Colors.Gray4)
         } else null,
         enabled = enabled && !isLoading,
         contentPadding = PaddingValues(horizontal = horizontalContentPadding, vertical = 0.dp),
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 0.dp,
+            defaultElevation = elevation,
             pressedElevation = 0.dp,  // ✅ No elevation change
             hoveredElevation = 0.dp,  // ✅ No elevation on hover
             focusedElevation = 0.dp   // ✅ No elevation on focus
@@ -77,6 +78,7 @@ fun ButtonNormal(
                 strokeWidth = 2.dp
             )
         } else {
+
             if (imageVector != null) {
                 Icon(imageVector, null, tint = imageTint)
                 Spacer(modifier = Modifier.width(8.dp))

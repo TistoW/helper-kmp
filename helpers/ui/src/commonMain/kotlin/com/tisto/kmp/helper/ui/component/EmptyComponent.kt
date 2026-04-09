@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,13 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
-import helper.helpers.ui.generated.resources.Res
-import helper.helpers.ui.generated.resources.hasil_pencarian_tidak_ditemukan
-import helper.helpers.ui.generated.resources.ic_asset_list
 
 @Composable
 fun EmptyState(
@@ -39,10 +36,7 @@ fun EmptyState(
         search
     }
     val textSubtitle = if (search.isNotEmpty()) {
-        stringResource(
-            Res.string.hasil_pencarian_tidak_ditemukan,
-            displaySearch
-        )
+        "Hasil pencarian $displaySearch tidak ditemukan"
     } else subtitle
 
     Column(
@@ -54,7 +48,7 @@ fun EmptyState(
     ) {
 
         Icon(
-            painter = painterResource(Res.drawable.ic_asset_list),
+            imageVector = Icons.AutoMirrored.Filled.FormatListBulleted,
             contentDescription = null,
             modifier = Modifier.size(32.dp)
         )
@@ -70,7 +64,7 @@ fun EmptyState(
 @Preview(showBackground = true)
 @Composable
 fun EmptyStatePreview() {
-    ZenentaHelperTheme {
+    HelperTheme {
         EmptyState(
             title = "No Data",
             subtitle = "There is no data available at the moment.",

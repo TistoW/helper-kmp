@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
-import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.ext.MobilePreview
 
 val IcDot: ImageVector
     get() = ImageVector.Builder(

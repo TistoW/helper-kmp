@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,13 +21,15 @@ fun ScaffoldBox(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable () -> Unit = {},
+    snackbarHost: @Composable (() -> Unit)? = null,
+    snackbarHostState: SnackbarHostState? = null,
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     isLoadingProcess: Boolean = false,
+    enableInnerPadding: Boolean = false,
     content: @Composable BoxScope.(PaddingValues) -> Unit
 ) {
 
@@ -33,7 +37,11 @@ fun ScaffoldBox(
         modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
-        snackbarHost = snackbarHost,
+        snackbarHost = snackbarHost ?: if (snackbarHostState != null) {
+            { AppSnackbarHost(snackbarHostState) }
+        } else {
+            {}
+        },
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
@@ -41,7 +49,9 @@ fun ScaffoldBox(
         contentWindowInsets = contentWindowInsets,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().then(
+                if (enableInnerPadding) Modifier.padding(it) else Modifier
+            )
         ) {
             content(it)
             LoadingDialog(isLoadingProcess)

@@ -2,7 +2,7 @@ package com.tisto.helper.core.helper.ui.image
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.tisto.kmp.helper.utils.ext.MobilePreview
+import com.tisto.kmp.helper.ui.ext.MobilePreview
 
 //val IcSearch: ImageVector
 //    get() {

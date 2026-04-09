@@ -17,14 +17,19 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.kmp.helper.utils.ext.MobilePreview
-import com.tisto.kmp.helper.utils.ext.ScreenConfig
-import com.tisto.kmp.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.ui.ext.MobilePreview
+import com.tisto.kmp.helper.ui.ext.ScreenConfig
+import com.tisto.kmp.helper.ui.ext.TabletPreview
 import com.tisto.kmp.helper.utils.ext.shorten
-import com.tisto.kmp.helper.utils.ext.title
+import com.tisto.kmp.helper.ui.ext.title
+
+sealed interface FormContent {
+    data class Column(val content: @Composable ColumnScope.() -> Unit) : FormContent
+    data class Form(val content: @Composable FormScopeImpl.() -> Unit) : FormContent
+}
 
 @Composable
 fun <ITEM> FormContainer(
@@ -41,7 +46,8 @@ fun <ITEM> FormContainer(
     onDelete: () -> Unit = {},
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    content: @Composable ColumnScope.() -> Unit, // 👈 important: allow ColumnScope
+    formScope: (@Composable FormScopeImpl.() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit = {},
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     val isMobile = screenConfig.isMobile
@@ -107,20 +113,33 @@ fun <ITEM> FormContainer(
                     verticalArrangement = Arrangement.Top
                 ) {
                     // ✅ all form fields
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (isMobile)
-                                    Modifier
-                                else
-                                    Modifier
-                            ),
-                        verticalArrangement = verticalArrangement,
-                        horizontalAlignment = horizontalAlignment,
-                        content = content
-                    )
-
+                    if (formScope != null) {
+                        FormScope {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .then(if (isMobile) Modifier else Modifier),
+                                verticalArrangement = verticalArrangement,
+                                horizontalAlignment = horizontalAlignment,
+                            ) {
+                                formScope()
+                            }
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .then(
+                                    if (isMobile)
+                                        Modifier
+                                    else
+                                        Modifier
+                                ),
+                            verticalArrangement = verticalArrangement,
+                            horizontalAlignment = horizontalAlignment,
+                            content = content
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -207,7 +226,7 @@ fun FromScreenContentPreview(
 ) {
     FormContainer(
         screenConfig = screenConfig,
-        item = Example(),
+        item = ExampleModel(),
         content = {
 
             Column {
@@ -232,7 +251,7 @@ fun FromScreenContentPreview(
 @TabletPreview
 @Composable
 fun TabletPreviewsForm() {
-    ZenentaHelperTheme {
+    HelperTheme {
         FromScreenContentPreview(ScreenConfig(700.dp))
     }
 
@@ -241,7 +260,7 @@ fun TabletPreviewsForm() {
 @MobilePreview
 @Composable
 fun MobilePreviewsForm() {
-    ZenentaHelperTheme {
+    HelperTheme {
         FromScreenContentPreview()
     }
 }

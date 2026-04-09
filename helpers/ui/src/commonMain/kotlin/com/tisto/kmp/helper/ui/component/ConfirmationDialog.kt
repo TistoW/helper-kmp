@@ -23,11 +23,8 @@ import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.kmp.helper.utils.ext.MobilePreview
-import helper.helpers.ui.generated.resources.Res
-import helper.helpers.ui.generated.resources.ic_asset_close
-import org.jetbrains.compose.resources.painterResource
+import com.tisto.kmp.helper.ui.ext.MobilePreview
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 
 // ========================================
 // 1. BASIC CONFIRMATION DIALOG
@@ -121,15 +118,14 @@ fun CustomConfirmationDialog(
     cancelText: String = "Cancel",
     icon: ImageVector = Icons.Default.Info,
     iconBackgroundColor: Color = Color(0xFFE6F9F8),
-    iconTint: Color = Color(0xFF0ABAB5),
-    cancelable: Boolean = false
+    iconTint: Color = Color(0xFF0ABAB5)
 ) {
     if (showDialog) {
         Dialog(
             onDismissRequest = onDismiss,
             properties = DialogProperties(
                 dismissOnBackPress = true,
-                dismissOnClickOutside = cancelable
+                dismissOnClickOutside = true
             )
         ) {
             Card(
@@ -183,6 +179,40 @@ fun CustomConfirmationDialog(
                             textAlign = TextAlign.Center,
                             lineHeight = 20.sp
                         )
+
+                        // Buttons
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+//
+//                        SimpleButton(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .height(48.dp),
+//                            backgroundColor = Colors.White,
+//                            strokeWidth = 0.5.dp,
+//                            strokeColor = Colors.Gray4,
+//                            text = cancelText,
+//                            textColor = Colors.Gray2,
+//                            onClick = {
+//                                onDismiss()
+//                            }
+//                        )
+//
+//                        Spacer(modifier = Modifier.width(Spacing.box))
+//
+//
+//                        SimpleButton(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .height(48.dp),
+//                            text = confirmText,
+//                            onClick = {
+//                                onConfirm()
+//                                onDismiss()
+//                            }
+//                        )
+//                    }
                     }
 
                     Box(
@@ -233,7 +263,7 @@ fun CustomConfirmationDialog(
                             modifier = Modifier.padding(vertical = Spacing.normal)
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_asset_close),
+                                imageVector = Icons.Default.Close,
                                 contentDescription = "Icon",
                                 tint = Colors.Gray2,
                                 modifier = Modifier
@@ -257,10 +287,11 @@ fun DeleteConfirmationDialog(
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    itemName: String = "item ini",
+    itemName: String = "item",
     title: String = "Hapus Data?",
     message: String = "Apakah Anda yakin ingin menghapus $itemName? Tindakan ini tidak dapat dibatalkan.",
     confirmText: String = "Hapus Data?",
+    cancelText: String = "Batal",
 ) {
     CustomConfirmationDialog(
         showDialog = showDialog,
@@ -269,7 +300,7 @@ fun DeleteConfirmationDialog(
         title = title,
         message = message,
         confirmText = confirmText,
-        cancelText = "Batal",
+        cancelText = cancelText,
         icon = Icons.Default.Delete,
         iconBackgroundColor = Color(0xFFFFEBEE),
         iconTint = Color(0xFFF44336),
@@ -368,8 +399,7 @@ fun WarningDialog(
     title: String,
     message: String,
     confirmText: String = "Lanjutkan",
-    cancelText: String = "Batal",
-    cancelable: Boolean = false
+    cancelText: String = "Batal"
 ) {
     CustomConfirmationDialog(
         showDialog = showDialog,
@@ -382,7 +412,6 @@ fun WarningDialog(
         icon = Icons.Default.Warning,
         iconBackgroundColor = Color(0xFFFFF3E0),
         iconTint = Color(0xFFFF9800),
-        cancelable = cancelable
     )
 }
 
@@ -1009,7 +1038,7 @@ fun QuickUsageExample() {
 @MobilePreview
 @Composable
 fun DeleteDialogExamplePreviews() {
-    ZenentaHelperTheme {
+    HelperTheme {
         DeleteConfirmationDialog(
             showDialog = true,
             onDismiss = { },

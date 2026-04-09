@@ -18,8 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
-import com.tisto.kmp.helper.utils.ext.TabletPreview
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.utils.ext.logs
 import kotlinx.coroutines.delay
 
@@ -184,7 +183,7 @@ fun ScannerGuideOverlay(
 @TabletPreview
 @Composable
 fun AttendancePreview() {
-    ZenentaHelperTheme {
+    HelperTheme {
         BarcodeScannerView(
             modifier = Modifier.fillMaxSize(),
             isPreview = true,

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -39,35 +40,32 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tisto.kmp.helper.ui.icon.MyIcon
+import com.tisto.kmp.helper.ui.icon.myicon.IcFilterSolar
 import com.tisto.kmp.helper.ui.theme.Colors
+import com.tisto.kmp.helper.ui.theme.HelperTheme
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.ui.theme.ZenentaHelperTheme
 import com.tisto.kmp.helper.utils.model.FilterGroup
 import com.tisto.kmp.helper.utils.model.FilterItem
 import com.tisto.kmp.helper.utils.model.FilterType
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
-import helper.helpers.ui.generated.resources.Res
-import helper.helpers.ui.generated.resources.*
 import kotlin.apply
 import kotlin.collections.filterNotNull
 import kotlin.collections.firstOrNull
-import kotlin.collections.forEach
 import kotlin.collections.toMutableMap
 
 @Composable
 fun simpleFilter(): List<FilterGroup> {
     return listOf(
         FilterGroup(
-            title = stringResource(Res.string.urutkan),
+            title = "Urutkan",
             type = FilterType.SORT,
             listOf(
-                FilterItem(stringResource(Res.string.nama_a_z), "asc", "name"),
-                FilterItem(stringResource(Res.string.nama_z_a), "desc", "name"),
-                FilterItem(stringResource(Res.string.terbaru), "desc", "createdAt"),
-                FilterItem(stringResource(Res.string.terlama), "asc", "createdAt"),
-                FilterItem(stringResource(Res.string.terakhir_diubah), "desc", "updatedAt")
+                FilterItem("Nama: A-Z", "asc", "name"),
+                FilterItem("Nama: Z-A", "desc", "name"),
+                FilterItem("Terbaru", "desc", "createdAt"),
+                FilterItem("Terlama", "asc", "createdAt"),
+                FilterItem("Terakhir Diubah", "desc", "updatedAt")
             )
         ),
         FilterGroup(
@@ -94,6 +92,7 @@ fun defaultFilter() = listOf(
         )
     )
 )
+
 @Composable
 fun GeneralFilterBottomSheet(
     onClose: () -> Unit,
@@ -132,11 +131,11 @@ fun GeneralFilterBottomSheet(
                 .padding(vertical = Spacing.box),
         ) {
             Text(
-                text = stringResource(Res.string.filter),
+                text = "Filter",
                 style = TextAppearance.title2Bold(),
             )
             Icon(
-                painter = painterResource(Res.drawable.ic_asset_close),
+                imageVector = Icons.Default.Close,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -179,7 +178,7 @@ fun GeneralFilterBottomSheet(
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = stringResource(Res.string.reset),
+                    text = "Reset",
                     style = TextAppearance.body2(),
                 )
             }
@@ -295,7 +294,7 @@ fun FilterButton(
                 }
             } else {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_filter_solar),
+                    imageVector = MyIcon.IcFilterSolar,
                     contentDescription = "Filter",
                     tint = Color.Unspecified,
                     modifier = Modifier
@@ -306,7 +305,7 @@ fun FilterButton(
             // 🔹 Label “Filter”
             Spacer(modifier = Modifier.width(Spacing.small))
             Text(
-                text = stringResource(Res.string.filter),
+                text = "Filter",
                 style = TextAppearance.body2()
             )
         }
@@ -349,7 +348,7 @@ fun RefreshButton(
 @Preview(showBackground = true)
 @Composable
 fun FilterButtonPreview() {
-    ZenentaHelperTheme {
+    HelperTheme {
         FilterButton()
     }
 }
@@ -357,7 +356,7 @@ fun FilterButtonPreview() {
 @Preview(showBackground = true)
 @Composable
 fun FilterButtonActivePreview() {
-    ZenentaHelperTheme {
+    HelperTheme {
         FilterButton(
             count = 3
         )
@@ -367,7 +366,7 @@ fun FilterButtonActivePreview() {
 @Preview(showBackground = true)
 @Composable
 fun GeneralFilterPreview() {
-    ZenentaHelperTheme {
+    HelperTheme {
         GeneralFilterBottomSheet(
             onClose = {}
         )

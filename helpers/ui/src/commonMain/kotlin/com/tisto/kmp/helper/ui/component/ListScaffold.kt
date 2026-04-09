@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,17 +22,12 @@ import com.tisto.kmp.helper.ui.theme.Colors
 import com.tisto.kmp.helper.ui.theme.Radius
 import com.tisto.kmp.helper.ui.theme.Spacing
 import com.tisto.kmp.helper.ui.theme.TextAppearance
-import com.tisto.kmp.helper.utils.ext.MobilePreview
-import com.tisto.kmp.helper.utils.ext.ScreenConfig
-import com.tisto.kmp.helper.utils.ext.TabletPreview
-import com.tisto.kmp.helper.utils.ext.isMobilePhone
+import com.tisto.kmp.helper.ui.ext.MobilePreview
+import com.tisto.kmp.helper.ui.ext.TabletPreview
+import com.tisto.kmp.helper.ui.ext.ScreenConfig
 import com.tisto.kmp.helper.utils.ext.reformatDate
 import com.tisto.kmp.helper.utils.model.FilterGroup
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.vectorResource
-import helper.helpers.ui.generated.resources.Res
-import helper.helpers.ui.generated.resources.ic_asset_close
-import helper.helpers.ui.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +50,8 @@ fun <STATE, ITEMS> ListScaffold(
     onAddClick: (() -> Unit)? = null,
 
     saveText: String = "Simpan",
+    emptyTitle: String = "Data Kosong",
+    emptySubtitle: String = "Belum ada data tersedia",
     onSave: (() -> Unit)? = null,
 
     filterOptions: List<FilterGroup> = emptyList(),
@@ -112,12 +111,12 @@ fun <STATE, ITEMS> ListScaffold(
 
         RefreshContainer(
             isRefreshing = isRefreshing || (isLoading && uiState.isSearching),
-            onRefresh = onRefresh
+            onRefresh = onRefresh,
+            modifier = contentModifier.fillMaxSize()
         ) {
 
             Column(
-                modifier = contentModifier
-                    .fillMaxSize()
+                modifier = contentModifier.fillMaxSize()
             ) {
 
                 /* =============================
@@ -146,9 +145,8 @@ fun <STATE, ITEMS> ListScaffold(
                                 strokeColor = Colors.Gray3,
                                 floatingLabel = false,
                                 cornerRadius = Radius.normal,
-                                leadingIcon = vectorResource(Res.drawable.ic_search),
-                                endIcon = if (searchQuery.isNotEmpty())
-                                    vectorResource(Res.drawable.ic_asset_close)
+                                leadingIcon = Icons.Default.Search,
+                                endIcon = if (searchQuery.isNotEmpty()) Icons.Default.Close
                                 else null,
                                 endIconOnClick = {
                                     searchQuery = ""
@@ -158,23 +156,11 @@ fun <STATE, ITEMS> ListScaffold(
                             )
                         }
 
-                        if (!screenConfig.isMobile) {
-                            Box(modifier = Modifier.weight(1.5f))
-                        }
-
                         if (filterOptions.isNotEmpty()) {
-                            Row(
-                                modifier = Modifier,
-                            ) {
-                                if (!isMobilePhone()) {
-                                    RefreshButton(onClick = onRefresh)
-                                    Spacer(Modifier.width(Spacing.small))
-                                }
-                                FilterButton(
-                                    count = uiState.filters.size,
-                                    onClick = { showFilterSheet = true }
-                                )
-                            }
+                            FilterButton(
+                                count = uiState.filters.size,
+                                onClick = { showFilterSheet = true }
+                            )
                         }
                     }
                 }
@@ -192,6 +178,18 @@ fun <STATE, ITEMS> ListScaffold(
 
                     LazyColumn(state = listState) {
                         content()
+
+
+                        if (list.size < 10) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .height(500.dp)
+                                        .fillMaxWidth()
+                                        .background(Colors.Gray5)
+                                )
+                            }
+                        }
                     }
 
                     // loading indicator
@@ -211,8 +209,8 @@ fun <STATE, ITEMS> ListScaffold(
                     // empty state
                     if (items.isEmpty() && !isLoading) {
                         EmptyState(
-                            title = "Data Kosong",
-                            subtitle = "Belum ada data tersedia",
+                            title = emptyTitle,
+                            subtitle = emptySubtitle,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
@@ -268,26 +266,28 @@ fun <STATE, ITEMS> ListScaffold(
 
 
 @Serializable
-data class Example(
+data class ExampleModel(
     val id: String = "",
-    val name: String = "",
     val code: String = "",
+    val name: String = "",
     val daerah: String = "",
     val createdAt: String = "",
 )
 
 
 private val list = List(10) {
-    Example(
+    ExampleModel(
         id = it.toString(),
-        name = "Category $it",
+        name = "Desa $it",
+        code = "CODE-${it}${it - 1}",
+        daerah = "Kabupaten $it",
         createdAt = "12 Des 2025"
     )
 }
 
 @Composable
 private fun ListItem(
-    item: Example,
+    item: ExampleModel,
     onClick: () -> Unit = {},
 ) {
     Column {
@@ -328,11 +328,10 @@ fun ScreenContentPreview(
 ) {
     ListScaffold(
         uiState = BaseUiState(
-            data = Example()
+            data = ExampleModel()
         ),
-        items = listOf<Example>(),
-        screenConfig = screenConfig,
-        filterOptions = defaultFilter()
+        items = listOf<ExampleModel>(),
+        screenConfig = screenConfig
     ) {
         items(list, key = { it.id }) { item ->
             ListItem(item = item)
